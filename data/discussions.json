@@ -1,0 +1,11 @@
+[
+  {
+    "id": "disc-001",
+    "channel": "general",
+    "topic": "Project Kickoff",
+    "date": "2026-04-30",
+    "summary": "Agreed on shared repo structure, Kanban dashboard approach, and Discord /log command for capturing discussions. Both builds are independent but will share this collaboration layer.",
+    "participants": ["sdtalley", "kjwheeler"],
+    "tags": ["meta", "setup"]
+  }
+]

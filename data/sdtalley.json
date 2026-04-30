@@ -1,0 +1,49 @@
+{
+  "owner": "sdtalley",
+  "lastUpdated": "2026-04-30",
+  "hardware": {
+    "compute": "",
+    "display": "",
+    "housing": "",
+    "notes": ""
+  },
+  "features": [
+    {
+      "id": "feat-001",
+      "name": "Calendar API Integration",
+      "status": "todo",
+      "updated": "2026-04-30",
+      "notes": ""
+    },
+    {
+      "id": "feat-002",
+      "name": "Display Driver / Rendering",
+      "status": "todo",
+      "updated": "2026-04-30",
+      "notes": ""
+    },
+    {
+      "id": "feat-003",
+      "name": "UI Layout",
+      "status": "todo",
+      "updated": "2026-04-30",
+      "notes": ""
+    },
+    {
+      "id": "feat-004",
+      "name": "Authentication / OAuth",
+      "status": "todo",
+      "updated": "2026-04-30",
+      "notes": ""
+    },
+    {
+      "id": "feat-005",
+      "name": "Auto-refresh / Scheduling",
+      "status": "todo",
+      "updated": "2026-04-30",
+      "notes": ""
+    }
+  ],
+  "blockers": [],
+  "repoUrl": ""
+}

@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Family Hub Collaboration Dashboard</title>
+  <style>
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d27;
+      --surface-2: #23273a;
+      --border: #2e3250;
+      --text: #e2e8f0;
+      --text-muted: #8892a4;
+      --todo: #6b7280;
+      --in-progress: #3b82f6;
+      --done: #22c55e;
+      --blocked: #ef4444;
+      --accent: #818cf8;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    header h1 {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--accent);
+    }
+
+    #last-updated {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    section {
+      margin-bottom: 40px;
+    }
+
+    section > h2 {
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+    }
+
+    /* Kanban */
+    .kanban {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .kanban-col {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px;
+    }
+
+    .kanban-col h3 {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 14px;
+    }
+
+    .kanban-col.col-todo h3      { color: var(--todo); }
+    .kanban-col.col-progress h3  { color: var(--in-progress); }
+    .kanban-col.col-done h3      { color: var(--done); }
+
+    .card {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 12px;
+      margin-bottom: 10px;
+    }
+
+    .card:last-child { margin-bottom: 0; }
+
+    .card-title {
+      font-weight: 600;
+      font-size: 13px;
+      margin-bottom: 8px;
+    }
+
+    .owners {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .owner-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+    }
+
+    .owner-handle {
+      color: var(--text-muted);
+      min-width: 72px;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .status-label {
+      font-size: 11px;
+    }
+
+    .status-todo       { background: var(--todo); }
+    .status-in-progress { background: var(--in-progress); }
+    .status-done       { background: var(--done); }
+    .status-blocked    { background: var(--blocked); }
+
+    .text-todo        { color: var(--todo); }
+    .text-in-progress { color: var(--in-progress); }
+    .text-done        { color: var(--done); }
+    .text-blocked     { color: var(--blocked); }
+
+    .card-notes {
+      margin-top: 8px;
+      font-size: 11px;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border);
+      padding-top: 6px;
+    }
+
+    /* Hardware table */
+    .hw-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .hw-table th, .hw-table td {
+      padding: 10px 14px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .hw-table th {
+      background: var(--surface-2);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .hw-table tr:last-child td { border-bottom: none; }
+
+    .hw-table td:first-child {
+      font-weight: 600;
+      color: var(--text-muted);
+      width: 120px;
+    }
+
+    .empty { color: var(--text-muted); font-style: italic; }
+
+    /* Discussions */
+    .discussions { display: flex; flex-direction: column; gap: 12px; }
+
+    .disc-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px 16px;
+    }
+
+    .disc-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+
+    .disc-topic {
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .disc-meta {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .disc-summary {
+      font-size: 13px;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    .disc-tags {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .tag {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 2px 7px;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    /* Error / loading */
+    .state-msg {
+      color: var(--text-muted);
+      font-style: italic;
+      padding: 12px 0;
+    }
+
+    .error-msg {
+      color: var(--blocked);
+      padding: 12px 0;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Family Hub — Collaboration Dashboard</h1>
+  <span id="last-updated">Loading…</span>
+</header>
+
+<main>
+  <section>
+    <h2>Feature Status</h2>
+    <div class="kanban" id="kanban">
+      <div class="kanban-col col-todo">
+        <h3>Todo</h3>
+        <div id="col-todo"></div>
+      </div>
+      <div class="kanban-col col-progress">
+        <h3>In Progress</h3>
+        <div id="col-in-progress"></div>
+      </div>
+      <div class="kanban-col col-done">
+        <h3>Done</h3>
+        <div id="col-done"></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Hardware Comparison</h2>
+    <table class="hw-table" id="hw-table">
+      <thead>
+        <tr>
+          <th>Component</th>
+          <th>sdtalley</th>
+          <th>kjwheeler</th>
+        </tr>
+      </thead>
+      <tbody id="hw-body"></tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Discussions</h2>
+    <div class="discussions" id="discussions"></div>
+  </section>
+</main>
+
+<script>
+  const BASE = 'https://raw.githubusercontent.com/sdtalley/familyhub-collaboration/main/data/';
+
+  const STATUS_ORDER = ['todo', 'in-progress', 'done', 'blocked'];
+
+  function statusClass(s) {
+    return 'status-' + (s === 'in-progress' ? 'in-progress' : s);
+  }
+
+  function textClass(s) {
+    return 'text-' + (s === 'in-progress' ? 'in-progress' : s);
+  }
+
+  function statusLabel(s) {
+    const map = { 'todo': 'Todo', 'in-progress': 'In Progress', 'done': 'Done', 'blocked': 'Blocked' };
+    return map[s] || s;
+  }
+
+  function val(v) {
+    return (v && v.trim()) ? v : '<span class="empty">—</span>';
+  }
+
+  async function loadData() {
+    const [sdtalley, kjwheeler, discussions] = await Promise.all([
+      fetch(BASE + 'sdtalley.json').then(r => r.json()),
+      fetch(BASE + 'kjwheeler.json').then(r => r.json()),
+      fetch(BASE + 'discussions.json').then(r => r.json())
+    ]);
+    return { sdtalley, kjwheeler, discussions };
+  }
+
+  function renderKanban(sdtalley, kjwheeler) {
+    // Build feature map by id
+    const kj = {};
+    for (const f of kjwheeler.features) kj[f.id] = f;
+
+    // Group by the "most advanced" status across both owners for column placement
+    const cols = { 'todo': [], 'in-progress': [], 'done': [], 'blocked': [] };
+
+    for (const sf of sdtalley.features) {
+      const kf = kj[sf.id] || { status: 'todo', notes: '' };
+      const order = s => STATUS_ORDER.indexOf(s);
+      // Place card in the column matching the most-advanced status
+      const best = order(sf.status) >= order(kf.status) ? sf.status : kf.status;
+      const col = best === 'in-progress' ? 'in-progress' : best;
+      cols[col].push({ sf, kf });
+    }
+
+    for (const [col, cards] of Object.entries(cols)) {
+      const el = document.getElementById('col-' + col);
+      if (!cards.length) {
+        el.innerHTML = '<p class="state-msg">Empty</p>';
+        continue;
+      }
+      el.innerHTML = cards.map(({ sf, kf }) => {
+        const notes = sf.notes || kf.notes;
+        return `
+          <div class="card">
+            <div class="card-title">${sf.name}</div>
+            <div class="owners">
+              <div class="owner-row">
+                <span class="owner-handle">sdtalley</span>
+                <span class="status-dot ${statusClass(sf.status)}"></span>
+                <span class="status-label ${textClass(sf.status)}">${statusLabel(sf.status)}</span>
+              </div>
+              <div class="owner-row">
+                <span class="owner-handle">kjwheeler</span>
+                <span class="status-dot ${statusClass(kf.status)}"></span>
+                <span class="status-label ${textClass(kf.status)}">${statusLabel(kf.status)}</span>
+              </div>
+            </div>
+            ${notes ? `<div class="card-notes">${notes}</div>` : ''}
+          </div>`;
+      }).join('');
+    }
+  }
+
+  function renderHardware(sdtalley, kjwheeler) {
+    const rows = ['compute', 'display', 'housing', 'notes'];
+    const labels = { compute: 'Compute', display: 'Display', housing: 'Housing', notes: 'Notes' };
+    document.getElementById('hw-body').innerHTML = rows.map(k => `
+      <tr>
+        <td>${labels[k]}</td>
+        <td>${val(sdtalley.hardware[k])}</td>
+        <td>${val(kjwheeler.hardware[k])}</td>
+      </tr>`).join('');
+  }
+
+  function renderDiscussions(discussions) {
+    const el = document.getElementById('discussions');
+    if (!discussions.length) {
+      el.innerHTML = '<p class="state-msg">No discussions logged yet.</p>';
+      return;
+    }
+    const sorted = [...discussions].sort((a, b) => b.date.localeCompare(a.date)).slice(0, 10);
+    el.innerHTML = sorted.map(d => `
+      <div class="disc-card">
+        <div class="disc-header">
+          <span class="disc-topic">${d.topic}</span>
+          <span class="disc-meta">${d.date} · #${d.channel} · ${d.participants.join(', ')}</span>
+        </div>
+        <p class="disc-summary">${d.summary}</p>
+        <div class="disc-tags">${(d.tags || []).map(t => `<span class="tag">${t}</span>`).join('')}</div>
+      </div>`).join('');
+  }
+
+  async function refresh() {
+    try {
+      const { sdtalley, kjwheeler, discussions } = await loadData();
+      renderKanban(sdtalley, kjwheeler);
+      renderHardware(sdtalley, kjwheeler);
+      renderDiscussions(discussions);
+      document.getElementById('last-updated').textContent =
+        'Last updated: ' + new Date().toLocaleTimeString();
+    } catch (err) {
+      document.getElementById('last-updated').textContent = 'Error loading data';
+      console.error(err);
+    }
+  }
+
+  refresh();
+  setInterval(refresh, 5 * 60 * 1000);
+</script>
+</body>
+</html>
