@@ -1,7 +1,7 @@
 require('dotenv').config();
 const { Client, GatewayIntentBits, EmbedBuilder } = require('discord.js');
 const { Octokit } = require('@octokit/rest');
-const Anthropic = require('@anthropic-ai/sdk');
+const { GoogleGenerativeAI } = require('@google/generative-ai');
 
 const REPO_OWNER = 'sdtalley';
 const REPO_NAME  = 'familyhub-collaboration';
@@ -13,8 +13,8 @@ const discord  = new Client({
     GatewayIntentBits.MessageContent, // requires privileged intent in Dev Portal
   ],
 });
-const octokit   = new Octokit({ auth: process.env.GITHUB_TOKEN });
-const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
+const genAI   = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 // ── GitHub helpers ────────────────────────────────────────────────────────────
 
@@ -86,15 +86,12 @@ async function handleLog(interaction) {
   const transcript   = messages.map(m => `[${m.createdAt.toISOString()}] ${m.author.username}: ${m.content}`).join('\n');
   const participants = [...new Set(messages.map(m => m.author.username))];
 
-  // 4. Summarize with Claude
+  // 4. Summarize with Gemini
   let topic, summary, tags;
   try {
-    const res = await anthropic.messages.create({
-      model:      'claude-sonnet-4-6',
-      max_tokens: 400,
-      messages: [{
-        role:    'user',
-        content: `You are logging a Discord discussion for a shared dev project. Two developers (sdtalley and kjwheeler) are independently building a Skylight-style family calendar display and use this Discord to compare decisions.
+    const model  = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+    const result = await model.generateContent(
+      `You are logging a Discord discussion for a shared dev project. Two developers (sdtalley and kjwheeler) are independently building a Skylight-style family calendar display and use this Discord to compare decisions.
 
 Summarize this #${channelName} discussion in 2-4 sentences. Focus on decisions made, approaches compared, or open questions raised. Then provide a short topic title (4-6 words) and 2-4 lowercase single-word tags.
 
@@ -102,16 +99,15 @@ Respond with valid JSON only — no markdown fences, no commentary:
 {"topic":"...","summary":"...","tags":["...","..."]}
 
 Discussion:
-${transcript}`,
-      }],
-    });
+${transcript}`
+    );
 
-    const parsed = JSON.parse(res.content[0].text.trim());
+    const parsed = JSON.parse(result.response.text().trim());
     topic   = parsed.topic;
     summary = parsed.summary;
     tags    = Array.isArray(parsed.tags) ? parsed.tags : [];
   } catch {
-    // Fallback if Claude call or parse fails
+    // Fallback if Gemini call or parse fails
     topic   = `${channelName} discussion`;
     summary = `${messages.length} messages exchanged in #${channelName}.`;
     tags    = [channelName];
