@@ -54,7 +54,7 @@ async function sendFollowup(appId, interactionToken, body) {
 async function ghGet(path, token) {
   const res = await fetch(
     `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${path}`,
-    { headers: { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github+json' } },
+    { headers: { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github+json', 'User-Agent': 'familyhub-discord-bot' } },
   );
   if (!res.ok) throw new Error(`GitHub API ${res.status} on ${path}: ${await res.text()}`);
   const data = await res.json();
@@ -73,6 +73,7 @@ async function ghCommit(path, json, message, sha, token) {
         Authorization:  `Bearer ${token}`,
         Accept:         'application/vnd.github+json',
         'Content-Type': 'application/json',
+        'User-Agent':   'familyhub-discord-bot',
       },
       body: JSON.stringify({
         message,
