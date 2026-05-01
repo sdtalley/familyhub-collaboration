@@ -1,0 +1,10 @@
+app = "familyhub-discord-bot"
+primary_region = "iad"
+
+[build]
+
+[env]
+  NODE_ENV = "production"
+
+# No [[services]] block — this is a worker process, not an HTTP server.
+# Secrets are set via: fly secrets set KEY=value
