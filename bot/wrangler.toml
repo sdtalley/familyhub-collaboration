@@ -1,0 +1,11 @@
+name = "familyhub-discord-bot"
+main = "worker.js"
+compatibility_date = "2025-01-01"
+
+# Secrets are NOT stored here — set them via:
+#   npx wrangler secret put DISCORD_TOKEN
+#   npx wrangler secret put DISCORD_PUBLIC_KEY
+#   npx wrangler secret put CLIENT_ID
+#   npx wrangler secret put GUILD_ID
+#   npx wrangler secret put GITHUB_TOKEN
+#   npx wrangler secret put GEMINI_API_KEY
