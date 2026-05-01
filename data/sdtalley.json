@@ -2,10 +2,11 @@
   "owner": "sdtalley",
   "lastUpdated": "2026-04-30",
   "hardware": {
-    "compute": "",
-    "display": "",
-    "housing": "",
-    "notes": ""
+    "compute": "Optiplex 3050 7th gen corei5",
+    "os":"lubuntu (current stable release)",
+    "display": "pisichen 27 touchscreen 2k resolution",
+    "housing": "wall-mount with short cable-run to machine",
+    "notes": "SFF machine in adjacent space, screen protector used"
   },
   "features": [
     {

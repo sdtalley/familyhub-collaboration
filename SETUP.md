@@ -120,7 +120,30 @@ panel, and commit your JSON/log updates without switching windows.
 
 ---
 
-## 8. View the Dashboard
+## 8. Future Alternative: GitHub Discussions
+
+If the Discord bot ever becomes a maintenance burden or feels like the wrong
+tool, there's a cleaner option: **GitHub Discussions + a GitHub Action**.
+
+GitHub fires webhook events whenever a discussion is created or edited. A
+workflow can trigger on those events, fetch all discussions via the GraphQL
+API using the built-in `GITHUB_TOKEN`, transform them into the same
+`discussions.json` format, and commit the file back automatically. No bot
+to host, no external infrastructure.
+
+The tradeoff: GitHub Discussions is a structured forum (markdown posts with
+threading), not a chat app. It's better for logging decisions than for
+quick back-and-forth. Discord stays better for real-time conversation.
+
+If you want to migrate: create a `sync-discussions.yml` workflow triggered
+on `discussion` events, call the GraphQL API to fetch discussion nodes
+(title, body, author, category, created date), and write them to
+`data/discussions.json` in the same schema. The dashboard requires no
+changes.
+
+---
+
+## 9. View the Dashboard
 
 The live dashboard is at:
 
