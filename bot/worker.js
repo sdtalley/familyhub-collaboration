@@ -37,6 +37,7 @@ async function discordGet(path, botToken) {
   const res = await fetch(`${DISCORD_API}${path}`, {
     headers: { Authorization: `Bot ${botToken}` },
   });
+  if (!res.ok) throw new Error(`Discord API ${res.status}: ${await res.text()}`);
   return res.json();
 }
 
@@ -55,6 +56,7 @@ async function ghGet(path, token) {
     `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${path}`,
     { headers: { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github+json' } },
   );
+  if (!res.ok) throw new Error(`GitHub API ${res.status} on ${path}: ${await res.text()}`);
   const data = await res.json();
   return {
     json: JSON.parse(atob(data.content.replace(/\n/g, ''))),
