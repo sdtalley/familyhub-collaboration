@@ -1,47 +1,47 @@
 {
   "owner": "kjwheeler",
-  "lastUpdated": "2026-04-30",
+  "lastUpdated": "2026-05-19",
   "hardware": {
-    "compute": "",
-    "display": "",
-    "housing": "",
-    "notes": ""
+    "compute": "TBD",
+    "display": "TBD",
+    "housing": "TBD",
+    "notes": "Initial setup complete; hardware choices still being decided."
   },
   "features": [
     {
       "id": "feat-001",
       "name": "Calendar API Integration",
       "status": "todo",
-      "updated": "2026-04-30",
-      "notes": ""
+      "updated": "2026-05-19",
+      "notes": "Not started yet."
     },
     {
       "id": "feat-002",
       "name": "Display Driver / Rendering",
       "status": "todo",
-      "updated": "2026-04-30",
-      "notes": ""
+      "updated": "2026-05-19",
+      "notes": "Not started yet."
     },
     {
       "id": "feat-003",
       "name": "UI Layout",
       "status": "todo",
-      "updated": "2026-04-30",
-      "notes": ""
+      "updated": "2026-05-19",
+      "notes": "Not started yet."
     },
     {
       "id": "feat-004",
       "name": "Authentication / OAuth",
       "status": "todo",
-      "updated": "2026-04-30",
-      "notes": ""
+      "updated": "2026-05-19",
+      "notes": "Not started yet."
     },
     {
       "id": "feat-005",
       "name": "Auto-refresh / Scheduling",
       "status": "todo",
-      "updated": "2026-04-30",
-      "notes": ""
+      "updated": "2026-05-19",
+      "notes": "Not started yet."
     }
   ],
   "blockers": [],

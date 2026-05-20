@@ -40,6 +40,12 @@ and what open questions exist.
 **kjwheeler's AI assistant** does the same for `data/kjwheeler.json` and
 `logs/kjwheeler.md`.
 
+## Discord Username Aliases
+
+When reading `discussions.json`, map Discord usernames to project identities:
+- `blue_banjo` = kjwheeler
+- `.stalley` = sdtalley
+
 ## Rules for Both
 
 - Never modify the other person's files
