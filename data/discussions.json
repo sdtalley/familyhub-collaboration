@@ -1,5 +1,19 @@
 [
   {
+    "id": "disc-003",
+    "channel": "general",
+    "topic": "general discussion",
+    "date": "2026-05-20",
+    "summary": "3 messages exchanged in #general.",
+    "participants": [
+      ".stalley",
+      "blue_banjo"
+    ],
+    "tags": [
+      "general"
+    ]
+  },
+  {
     "id": "disc-002",
     "channel": "general",
     "topic": "general discussion",
