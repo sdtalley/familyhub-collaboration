@@ -1,49 +1,91 @@
 {
   "owner": "kjwheeler",
-  "lastUpdated": "2026-05-19",
+  "lastUpdated": "2026-05-21",
   "hardware": {
-    "compute": "TBD",
-    "display": "TBD",
+    "compute": "TBD — Raspberry Pi or similar SBC per location",
+    "display": "TBD — large-format capacitive touch display (~27\"), wall-mounted landscape",
     "housing": "TBD",
-    "notes": "Initial setup complete; hardware choices still being decided."
+    "notes": "Hardware not yet purchased. App runs in Chromium kiosk mode pointed at Vercel URL. Pi is just a display client — all state in Supabase cloud."
   },
   "features": [
     {
       "id": "feat-001",
-      "name": "Calendar API Integration",
-      "status": "todo",
-      "updated": "2026-05-19",
-      "notes": "Not started yet."
+      "name": "Data Layer / Backend",
+      "status": "complete",
+      "updated": "2026-05-21",
+      "notes": "App owns all data — no external calendar API. Supabase (PostgreSQL) is the source of truth. Realtime subscriptions push changes instantly to all connected clients. No polling."
     },
     {
       "id": "feat-002",
-      "name": "Display Driver / Rendering",
-      "status": "todo",
-      "updated": "2026-05-19",
-      "notes": "Not started yet."
+      "name": "Authentication",
+      "status": "complete",
+      "updated": "2026-05-21",
+      "notes": "Supabase Auth with @supabase/ssr. Phase 1: single shared family login. Phase 2: per-user accounts planned."
     },
     {
       "id": "feat-003",
-      "name": "UI Layout",
-      "status": "todo",
-      "updated": "2026-05-19",
-      "notes": "Not started yet."
+      "name": "Calendar Views",
+      "status": "complete",
+      "updated": "2026-05-21",
+      "notes": "Three view types: HourlyGrid (Day/3-Day/Week with time-positioned event blocks), SummaryGrid (2-Week/Month with day boxes and multi-day spanning bars), Schedule (chronological agenda list). All ship in Phase 1."
     },
     {
       "id": "feat-004",
-      "name": "Authentication / OAuth",
-      "status": "todo",
-      "updated": "2026-05-19",
-      "notes": "Not started yet."
+      "name": "Event CRUD",
+      "status": "complete",
+      "updated": "2026-05-21",
+      "notes": "Full create/edit/delete via modals. Events support: title, description, location, timed or all-day, multi-member assignment, house tag for Household events."
     },
     {
       "id": "feat-005",
-      "name": "Auto-refresh / Scheduling",
+      "name": "Per-Member Filtering",
+      "status": "complete",
+      "updated": "2026-05-21",
+      "notes": "Filter chips with dual click zones: avatar = solo mode (show only this person), body = toggle. Compact 4-column grid on mobile, full chip row on desktop."
+    },
+    {
+      "id": "feat-006",
+      "name": "Parenting / Custody Schedule",
+      "status": "complete",
+      "updated": "2026-05-21",
+      "notes": "7 or 14-day repeating pattern with per-day toggle in settings. One-off overrides supported. Custody overlay renders as background color on both HourlyGrid and SummaryGrid views."
+    },
+    {
+      "id": "feat-007",
+      "name": "Weather Widget",
+      "status": "complete",
+      "updated": "2026-05-21",
+      "notes": "Open-Meteo (free, no API key). 16-day daily forecast shown in day headers. Clicking opens hourly detail modal with precip probability. Lat/lon configured in Settings."
+    },
+    {
+      "id": "feat-008",
+      "name": "Responsive Mobile Layout",
+      "status": "complete",
+      "updated": "2026-05-21",
+      "notes": "Bottom nav on mobile, left sidebar on desktop. Compact filter chips, color-only event tiles in summary views. Tested on iPhone via Tailscale + iPad."
+    },
+    {
+      "id": "feat-009",
+      "name": "PWA / Installable",
+      "status": "complete",
+      "updated": "2026-05-21",
+      "notes": "PWA manifest, generated icons (192/512px), Apple touch icon. Installable on phones from Vercel URL."
+    },
+    {
+      "id": "feat-010",
+      "name": "Per-User Logins",
+      "status": "in-progress",
+      "updated": "2026-05-21",
+      "notes": "Phase 2 start. Each parent gets their own Supabase Auth account. Role stored in user metadata. Household event filtering (kyle/mel/both) depends on this."
+    },
+    {
+      "id": "feat-011",
+      "name": "Recurring Events",
       "status": "todo",
-      "updated": "2026-05-19",
-      "notes": "Not started yet."
+      "updated": "2026-05-21",
+      "notes": "Phase 2. App-native repeat logic (no rrule dependency until external calendars added in Phase 3)."
     }
   ],
   "blockers": [],
-  "repoUrl": ""
+  "repoUrl": "https://github.com/kjwheeler/wheeler-calendar"
 }
