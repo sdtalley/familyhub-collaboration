@@ -1,6 +1,6 @@
 {
   "owner": "kjwheeler",
-  "lastUpdated": "2026-05-21",
+  "lastUpdated": "2026-05-23T23:00:00",
   "hardware": {
     "compute": "TBD — Raspberry Pi or similar SBC per location",
     "display": "TBD — large-format capacitive touch display (~27\"), wall-mounted landscape",
@@ -77,6 +77,34 @@
       "status": "in-progress",
       "updated": "2026-05-21",
       "notes": "Phase 2 start. Each parent gets their own Supabase Auth account. Role stored in user metadata. Household event filtering (kyle/mel/both) depends on this."
+    },
+    {
+      "id": "feat-012",
+      "name": "Theme System (Design Tokens + Light/Dark)",
+      "status": "complete",
+      "updated": "2026-05-23",
+      "notes": "16-token CSS custom property system (added --past token). All components use semantic tokens. Light theme via [data-theme='light'] attribute overrides. Anti-flash script in <head>. useTheme hook with localStorage. Settings → Appearance toggle. Light-color tile border via isLightColor() + LIGHT_TILE_BORDER for near-white tiles (Family slate-200, Mel yellow)."
+    },
+    {
+      "id": "feat-013",
+      "name": "Compact / Spacious Layout Density",
+      "status": "complete",
+      "updated": "2026-05-23",
+      "notes": "useLayoutDensity hook persists to localStorage. Compact mode reduces: filter chip height, event tile min-height (22px vs 48px), parent/child band widths, date number size, weather icon size, inter-tile gap, day cell bottom padding. Settings → Appearance toggle."
+    },
+    {
+      "id": "feat-014",
+      "name": "Long-press Day Tile → Add Event",
+      "status": "complete",
+      "updated": "2026-05-23",
+      "notes": "500ms long-press on SummaryGridView day cells opens add-event modal pre-filled with tapped date. makeLongPressHandlers() factory pattern avoids calling hooks in .map() loops. Cancels on pointer-up or pointer-leave. Context menu suppressed."
+    },
+    {
+      "id": "feat-015",
+      "name": "Past Day Visual Distinction",
+      "status": "complete",
+      "updated": "2026-05-23",
+      "notes": "--past CSS token: #090e1a dark / #e8edf2 light. Past day cells get bg-past background. Past day content gets opacity-60. Custody overlay uses gradient layering (linear-gradient as image layer over --past var). Alpha: 0.12 past / 0.15 future so past days recede."
     },
     {
       "id": "feat-011",
