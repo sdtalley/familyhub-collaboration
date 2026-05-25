@@ -1,6 +1,6 @@
 {
   "owner": "kjwheeler",
-  "lastUpdated": "2026-05-23T23:00:00",
+  "lastUpdated": "2026-05-25T23:00:00",
   "hardware": {
     "compute": "TBD — Raspberry Pi or similar SBC per location",
     "display": "TBD — large-format capacitive touch display (~27\"), wall-mounted landscape",
@@ -26,22 +26,22 @@
       "id": "feat-003",
       "name": "Calendar Views",
       "status": "complete",
-      "updated": "2026-05-21",
-      "notes": "Three view types: HourlyGrid (Day/3-Day/Week with time-positioned event blocks), SummaryGrid (2-Week/Month with day boxes and multi-day spanning bars), Schedule (chronological agenda list). All ship in Phase 1."
+      "updated": "2026-05-25",
+      "notes": "Three view types: HourlyGrid (Day/3-Day/Week with time-positioned event blocks), SummaryGrid (2-Week/4-Week/Month with day boxes and multi-day spanning bars), Schedule (chronological agenda list). 4-Week view added in Phase 2 — 28 days from anchor week, no out-of-month dimming, default view on load. Month view is paper-calendar style: out-of-month cells show darker bg but hide events/weather; past in-month cells show dimmed content. 3-Day prev/next moves 1 day at a time."
     },
     {
       "id": "feat-004",
       "name": "Event CRUD",
       "status": "complete",
-      "updated": "2026-05-21",
-      "notes": "Full create/edit/delete via modals. Events support: title, description, location, timed or all-day, multi-member assignment, house tag for Household events."
+      "updated": "2026-05-25",
+      "notes": "Full create/edit/delete via modals. Events support: title, description, location, timed or all-day, multi-member assignment, house tag for Household events. EventModal UX: stacked datetime inputs (no AM/PM clipping), start-time change auto-adjusts end to maintain duration."
     },
     {
       "id": "feat-005",
       "name": "Per-Member Filtering",
       "status": "complete",
       "updated": "2026-05-21",
-      "notes": "Filter chips with dual click zones: avatar = solo mode (show only this person), body = toggle. Compact 4-column grid on mobile, full chip row on desktop."
+      "notes": "Filter chips with dual click zones: avatar = solo mode (show only this person), body = toggle. Compact 4-column grid on mobile, full chip row on desktop. Holidays chip removed from main view; controlled via Settings toggle instead."
     },
     {
       "id": "feat-006",
@@ -55,7 +55,7 @@
       "name": "Weather Widget",
       "status": "complete",
       "updated": "2026-05-21",
-      "notes": "Open-Meteo (free, no API key). 16-day daily forecast shown in day headers. Clicking opens hourly detail modal with precip probability. Lat/lon configured in Settings."
+      "notes": "Open-Meteo (free, no API key). 16-day daily forecast shown in day headers. Clicking opens hourly detail modal with precip probability. Lat/lon configured in Settings. Weather hidden on out-of-month days in month view."
     },
     {
       "id": "feat-008",
@@ -76,7 +76,14 @@
       "name": "Per-User Logins",
       "status": "in-progress",
       "updated": "2026-05-21",
-      "notes": "Phase 2 start. Each parent gets their own Supabase Auth account. Role stored in user metadata. Household event filtering (kyle/mel/both) depends on this."
+      "notes": "Phase 2. Each parent gets their own Supabase Auth account. Role stored in user metadata. Household event filtering (kyle/mel/both) depends on this."
+    },
+    {
+      "id": "feat-011",
+      "name": "Recurring Events",
+      "status": "complete",
+      "updated": "2026-05-25",
+      "notes": "App-native recurrence — no rrule dependency. Custom rule schema stored as JSONB in event_series table. Individual occurrence rows generated on demand. Scope dialog for edit/delete (this/following/all). Series cleanup on 'following' delete. Ships in Phase 2."
     },
     {
       "id": "feat-012",
@@ -107,11 +114,25 @@
       "notes": "--past CSS token: #090e1a dark / #e8edf2 light. Past day cells get bg-past background. Past day content gets opacity-60. Custody overlay uses gradient layering (linear-gradient as image layer over --past var). Alpha: 0.12 past / 0.15 future so past days recede."
     },
     {
-      "id": "feat-011",
-      "name": "Recurring Events",
-      "status": "todo",
-      "updated": "2026-05-21",
-      "notes": "Phase 2. App-native repeat logic (no rrule dependency until external calendars added in Phase 3)."
+      "id": "feat-016",
+      "name": "Drag Gestures (HourlyView)",
+      "status": "complete",
+      "updated": "2026-05-25",
+      "notes": "Drag-to-create: click-drag on empty HourlyView area opens add-event modal pre-filled with dragged time range. Drag-to-reschedule: drag existing event tile to new time slot, updates optimistically then PATCHes API. Shift-drag copies the event to the new slot (POST). Separate EditState machine tracking DragPhase internals. Touch and mouse pointer events both handled."
+    },
+    {
+      "id": "feat-017",
+      "name": "Click-to-Select + Action Panel",
+      "status": "complete",
+      "updated": "2026-05-25",
+      "notes": "Click event tile in SummaryGridView to select it (blue inset ring). Floating action panel appears anchored near tile with Details/Edit/Delete buttons (position: fixed, clamped to viewport). Shift+click for multi-select. SelectionToolbar for 2+ selected events. Delete/Backspace keyboard shortcut. Delete toast with 4s undo window — optimistic removal, flushPendingDelete() fires actual API calls, Undo cancels timer and restores events via restoreEventsLocal()."
+    },
+    {
+      "id": "feat-018",
+      "name": "US Holidays Import",
+      "status": "complete",
+      "updated": "2026-05-25",
+      "notes": "Imports US public holidays from Nager.Date free API (3 years: current + 2 ahead). POST /api/holidays/sync deduplicates by date, inserts events at noon UTC (all_day=true), links to Holidays member. Holidays member color lightened to #e07a94. Settings page: show/hide toggle (show_holidays DB column, default true) + Sync button with status message. Holidays chip removed from main calendar filter row."
     }
   ],
   "blockers": [],
