@@ -28,7 +28,7 @@
       "name": "UI Layout",
       "status": "complete",
       "updated": "2026-05-25",
-      "notes": "Balanced Hearth light theme shipped (commit 9f09219). next-themes, oklch tokens, cream paper bg, 7-member Talley family palette (mom/dad/ivy/gwen/jonah/eliza/redd), Settings Appearance toggle. Dark mode preserved."
+      "notes": "Balanced Hearth Phase 2 shipped (commit ece7daa). SVG stroke tab icons + per-condition weather icons. getEventPillColors() utility routes CSS var fill/ink/bar tokens correctly — fixes broken oklch pill rendering across all 5 calendar views."
     },
     {
       "id": "feat-004",
