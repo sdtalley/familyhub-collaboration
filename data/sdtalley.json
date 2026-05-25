@@ -1,6 +1,6 @@
 {
   "owner": "sdtalley",
-  "lastUpdated": "2026-04-30",
+  "lastUpdated": "2026-05-25",
   "hardware": {
     "compute": "Optiplex 3050 7th gen corei5",
     "os":"lubuntu (current stable release)",
@@ -12,39 +12,39 @@
     {
       "id": "feat-001",
       "name": "Calendar API Integration",
-      "status": "todo",
-      "updated": "2026-04-30",
-      "notes": ""
+      "status": "complete",
+      "updated": "2026-05-25",
+      "notes": "Google, Apple iCloud CalDAV, Outlook OAuth all wired. Phase 3A–3D features shipped (chores, routines, rewards, meals, recipes, screensaver, sleep, virtual keyboard)."
     },
     {
       "id": "feat-002",
       "name": "Display Driver / Rendering",
-      "status": "todo",
-      "updated": "2026-04-30",
-      "notes": ""
+      "status": "complete",
+      "updated": "2026-05-25",
+      "notes": "Kiosk mode (NEXT_PUBLIC_LOCAL_MODE), cursor hide, sleep/wake via rtcwake, screensaver slideshow."
     },
     {
       "id": "feat-003",
       "name": "UI Layout",
-      "status": "todo",
-      "updated": "2026-04-30",
-      "notes": ""
+      "status": "complete",
+      "updated": "2026-05-25",
+      "notes": "Balanced Hearth light theme shipped (commit 9f09219). next-themes, oklch tokens, cream paper bg, 7-member Talley family palette (mom/dad/ivy/gwen/jonah/eliza/redd), Settings Appearance toggle. Dark mode preserved."
     },
     {
       "id": "feat-004",
       "name": "Authentication / OAuth",
-      "status": "todo",
-      "updated": "2026-04-30",
-      "notes": ""
+      "status": "complete",
+      "updated": "2026-05-25",
+      "notes": "Multi-user auth + role system (admin/member/guest). JWT sessions, bcrypt passwords, PIN lock for Settings."
     },
     {
       "id": "feat-005",
       "name": "Auto-refresh / Scheduling",
-      "status": "todo",
-      "updated": "2026-04-30",
-      "notes": ""
+      "status": "complete",
+      "updated": "2026-05-25",
+      "notes": "Configurable refresh interval (default 5 min), localStorage event cache for snappy reloads."
     }
   ],
   "blockers": [],
-  "repoUrl": ""
+  "repoUrl": "https://github.com/sdtalley/TalleyCalendar"
 }
