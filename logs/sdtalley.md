@@ -4,6 +4,13 @@ Append-only. Newest entries at top. Do not edit existing entries.
 
 ---
 
+### 2026-05-25 — Design system alignment: InfoBar, NavRail, pills, month grid
+**Area:** UI Layout  
+**What happened:** Shipped commit 7e351e5 — 11 files, 8 design fixes from atoms.jsx/views.jsx spec. InfoBar: 64px, date 26px Inter bold, time 14px mono dim, weather inline. NavSidebar: 64px "T" logo header aligning nav with content pane, tab 64px height. CalendarTab: spacer moved so label(18px)+buttons right-align, view button always accent-pill, filter = icon-only circle, nav = chevron circles, Today = pill. MonthView: date numbers left-aligned, 15px. All 5 views: borderLeft crescent replaced with absolute-div bar (overflow:hidden clip) = straight stripe. Pills: radius-sm (10px). --bg chroma 0.014→0.007, --surface near-pure white. Build+tsc clean.  
+**Open question:** None — awaiting screenshot review from user.
+
+---
+
 ### 2026-05-25 — Balanced Hearth Phase 3: Pastel swatches + avatar fill/ink
 **Area:** UI Layout  
 **What happened:** Shipped commit fdd07a5. Fixed Settings color picker and member avatars. `PRESET_COLORS` refactored from `string[]` to `ColorPreset[] { bar, fill, label }` — each swatch now displays the pastel `fill` (CSS var for Talley members, color-mix for shared categories) while storing the saturated `bar` as `member.color`. `MemberAvatarDisplay` changed from `p.bar + white` to `p.fill + p.ink`, matching the filter chip pastel aesthetic in CalendarTab. Build clean, tsc clean.  
