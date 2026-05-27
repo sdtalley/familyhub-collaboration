@@ -1,11 +1,11 @@
 {
   "owner": "kjwheeler",
-  "lastUpdated": "2026-05-25T23:00:00",
+  "lastUpdated": "2026-05-25T23:59:00",
   "hardware": {
-    "compute": "TBD — Raspberry Pi or similar SBC per location",
-    "display": "TBD — large-format capacitive touch display (~27\"), wall-mounted landscape",
-    "housing": "TBD",
-    "notes": "Hardware not yet purchased. App runs in Chromium kiosk mode pointed at Vercel URL. Pi is just a display client — all state in Supabase cloud."
+    "compute": "Raspberry Pi 4B",
+    "display": "27\" QHD 1440p IPS 100Hz, wall-mounted landscape",
+    "housing": "TBD — second location (Mel's) pending",
+    "notes": "Kyle's location deployed: Pi 4B + Pi OS Lite 64-bit + Wayfire (Wayland) + Chromium kiosk pointed at Vercel URL. Supabase session persists in Chromium profile across reboots. Pi is just a display client — all state in Supabase cloud."
   },
   "features": [
     {
@@ -27,7 +27,7 @@
       "name": "Calendar Views",
       "status": "complete",
       "updated": "2026-05-25",
-      "notes": "Three view types: HourlyGrid (Day/3-Day/Week with time-positioned event blocks), SummaryGrid (2-Week/4-Week/Month with day boxes and multi-day spanning bars), Schedule (chronological agenda list). 4-Week view added in Phase 2 — 28 days from anchor week, no out-of-month dimming, default view on load. Month view is paper-calendar style: out-of-month cells show darker bg but hide events/weather; past in-month cells show dimmed content. 3-Day prev/next moves 1 day at a time."
+      "notes": "Three view types: HourlyGrid (hourly-auto/day/week — time-positioned blocks), SummaryGrid (daily-auto/month — day boxes + spanning bars), Schedule (chronological agenda list). Split-button picker in CalendarInfoBar with Clock/LayoutGrid/List icons (lucide-react). daily-auto: computeDailyAutoWeeks() formula-based row height (spanBarH + dayOverhead + maxDayEvents × tileH) with ResizeObserver; shows max weeks fitting without scroll; default view on load. month: paper-calendar style — out-of-month cells darker bg + hide events/weather; past in-month cells dimmed. CalendarView type: 'hourly-auto'|'day'|'week'|'daily-auto'|'month'|'schedule'."
     },
     {
       "id": "feat-004",
@@ -73,10 +73,24 @@
     },
     {
       "id": "feat-010",
-      "name": "Per-User Logins",
-      "status": "in-progress",
-      "updated": "2026-05-21",
-      "notes": "Phase 2. Each parent gets their own Supabase Auth account. Role stored in user metadata. Household event filtering (kyle/mel/both) depends on this."
+      "name": "Device Identity + PIN System",
+      "status": "complete",
+      "updated": "2026-05-25",
+      "notes": "Device identity via UUID in localStorage → device_settings DB row per device (house, theme, density, show_holidays, weather lat/lon). useDeviceSettings hook; seeds localStorage from DB on load (Pi reboot recovery). PIN per parent (Kyle/Mel): HMAC-SHA256 server-side with PIN_SALT env var; /api/pin/verify + /api/pin/set; useAdminSession hook. Active parent in sessionStorage. Settings page rewritten with sticky header tabs (This Device / Family) + always-visible unlock buttons. Supabase Auth single shared login still protects Vercel URL. Decision: device identity chosen over per-Supabase-Auth-account-per-parent."
+    },
+    {
+      "id": "feat-019",
+      "name": "Household Event House Filtering",
+      "status": "complete",
+      "updated": "2026-05-25",
+      "notes": "event.house ('kyle'|'mel'|'both'|null) compared against deviceSettings.house in CalendarTab. null/both show everywhere; kyle/mel only show on matching device house; shared devices see all. Filtered before any view receives events."
+    },
+    {
+      "id": "feat-020",
+      "name": "SummaryGridView Three Rendering Modes",
+      "status": "complete",
+      "updated": "2026-05-25",
+      "notes": "useIsMobile hook (matchMedia ≤767px) separate from compact density preference. Mobile: text overlays on tiles, child color stripes fill full width for multi-child, no parent indent, compact padding, all events shown (no 4-event cap). Desktop compact: normal text flow in flex, ml-4 indent, w-2 right child bands. Desktop spacious: full layout, ml-5 indent, w-3 bands, time labels. Mobile-specific behavior gates on isMobile, not compact."
     },
     {
       "id": "feat-011",
@@ -133,8 +147,30 @@
       "status": "complete",
       "updated": "2026-05-25",
       "notes": "Imports US public holidays from Nager.Date free API (3 years: current + 2 ahead). POST /api/holidays/sync deduplicates by date, inserts events at noon UTC (all_day=true), links to Holidays member. Holidays member color lightened to #e07a94. Settings page: show/hide toggle (show_holidays DB column, default true) + Sync button with status message. Holidays chip removed from main calendar filter row."
+    },
+    {
+      "id": "feat-021",
+      "name": "Wheeler Bank",
+      "status": "complete",
+      "updated": "2026-05-26",
+      "notes": "Full family banking app within the calendar. PIN-based login (separate from calendar auth). Admins (Kyle/Mel) see all members with total balances; children see their own accounts only. Per-child accounts: Spending (withdrawals, transfers, interest), Mission Savings (no withdrawals, higher APR), up to 3 Special Savings (goal-locked, locked until goal met, then Transfer to Spending). Configurable APR per account type (admin-only Interest Rates modal). Daily compounding interest via pg_cron + generate_series. Completed savings count toward Spending balance for interest purposes. Admin can add/edit/delete transactions; special savings have deposit caps and withdrawal guards. Transfer-to-Spending fires confetti animation + card pulse. Mobile layout: single scroll container on mobile, sticky account tabs in admin view, Completed Goals stacks below transactions on mobile. Wheeler Bank PNG icon in nav, admin header, and login screen. Colors fetched dynamically from calendar members table."
+    },
+    {
+      "id": "feat-022",
+      "name": "In-App Virtual Keyboard",
+      "status": "complete",
+      "updated": "2026-05-26",
+      "notes": "VirtualKeyboardContext + VirtualKeyboard component. QWERTY (data-vk) and numpad (data-vk-num) modes. onPointerDown={e=>e.preventDefault()} prevents input blur on key tap. numpadStrRef tracks intermediate numeric strings ('-', '5.') that browsers reject as valid type='number' values. Gated on device_settings.virtual_keyboard boolean per device. Wired to EventModal, Settings, and all Bank modals."
+    },
+    {
+      "id": "feat-023",
+      "name": "Pi Kiosk Setup",
+      "status": "complete",
+      "updated": "2026-05-26",
+      "notes": "Pi 4B + Pi OS Lite 64-bit + Wayfire (Wayland compositor) + Chromium kiosk mode pointed at Vercel URL. 27\" QHD 1440p IPS 100Hz display. Supabase session persists in Chromium profile across reboots. Kyle's location deployed; Mel's location pending."
     }
   ],
   "blockers": [],
+  "lastUpdated": "2026-05-26T22:00:00",
   "repoUrl": "https://github.com/kjwheeler/wheeler-calendar"
 }
