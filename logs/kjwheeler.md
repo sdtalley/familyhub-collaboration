@@ -4,6 +4,20 @@ Append-only. Newest entries at top. Do not edit existing entries.
 
 ---
 
+### 2026-05-27 — Display Schedule: Per-Device Scheduled and Manual Display Control
+**Area:** Hardware / Kiosk / Settings
+**What happened:** Built end-to-end display scheduling system. Pi-side: installed ddcutil (DDC/CI brightness via HDMI I2C) and wlopm (built from source — Wayland compositor display on/off, avoids HDMI signal drop caused by ddcutil D6 power-off). Supabase: display_schedule table (device_id, days[], time, action, brightness, enabled) with Realtime enabled. API: CRUD routes at /api/display-schedule. Settings page: new Display Schedule section in Device tab with schedule list, add-event form (day picker, time, action, brightness slider), and manual broadcast buttons (on/off/brightness). Pi daemon (pi/display-daemon.mjs + systemd service): subscribes to Supabase Realtime for schedule changes (rebuilds node-cron jobs) and broadcast channel for immediate commands from settings page. Tested: manual on/off/brightness all confirmed working end-to-end.
+**Open question:** Mel's location hardware still pending; daemon will need to be set up there too.
+
+---
+
+### 2026-05-26 — Pi Kiosk: DDC/CI Hardware Brightness Control Setup
+**Area:** Hardware / Kiosk
+**What happened:** Investigated screen dimming options for the always-on kiosk display. `/sys/class/backlight/` exists but is empty (no driver registered for HDMI monitor). `xrandr` not available (Wayland). Installed `ddcutil` for DDC/CI brightness control over I2C. Required loading the `i2c-dev` kernel module: `sudo modprobe i2c-dev` (immediate) and `echo i2c-dev | sudo tee -a /etc/modules` (persistent across reboots). Monitor detected as Dell U2410 on `/dev/i2c-20`. Use `ddcutil setvcp 10 <0-100>` to set brightness; VCP code 10 = brightness.
+**Open question:** Integrate dimming into app via API route or cron. CSS `filter: brightness()` as in-app fallback if needed.
+
+---
+
 ### 2026-05-26 — Phase 2e: View Picker Overhaul, Smart Daily-Auto, Virtual Keyboard, Pi Kiosk
 **Area:** Calendar UI / Mobile / Hardware
 **What happened:** Overhauled the calendar view picker — replaced flat dropdown with three split buttons in CalendarInfoBar: Clock (Hourly), LayoutGrid (Daily), List (Schedule) icons from lucide-react. `CalendarView` type simplified to `'hourly-auto'|'day'|'week'|'daily-auto'|'month'|'schedule'` (removed 3day, 2week, 4week). Clicking main split button selects Auto; chevron opens dropdown with named duration sub-options. Implemented smart daily-auto: `computeDailyAutoWeeks()` formula-based row height estimation (`spanBarH + dayOverhead + maxDayEvents × (tileH + cellGap)`) walking up to 6 candidate weeks; container height measured via ResizeObserver; always fetches 6 weeks of events to avoid circular dependency with `autoDailyWeeks`. Added `isMonthView` prop to SummaryGridView so daily-auto at 6 weeks never triggers month out-of-month dimming. Fixed mobile height calculation: `small = isMobile || compact` ensures mobile always uses compact-sized tile constants (22px) regardless of user density setting. Removed 4-event mobile cap — all events shown, simplifying height formula. Fixed mobile info bar clipping: text labels → icons, short date string on mobile (no weekday), Today button `px-1` on mobile. Fixed React hydration error from browser-injected `-webkit-text-size-adjust` by adding `suppressHydrationWarning` to `<body>`. Also shipped this session: in-app virtual keyboard (VirtualKeyboardContext + VirtualKeyboard, QWERTY + numpad, gated on `device_settings.virtual_keyboard`, wired to EventModal, Settings, Bank). Pi 4B + 27" QHD 1440p kiosk deployed and running at Kyle's house on Wayfire/Wayland/Chromium.

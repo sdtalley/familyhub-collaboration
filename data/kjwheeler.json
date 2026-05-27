@@ -166,11 +166,18 @@
       "id": "feat-023",
       "name": "Pi Kiosk Setup",
       "status": "complete",
-      "updated": "2026-05-26",
+      "updated": "2026-05-27",
       "notes": "Pi 4B + Pi OS Lite 64-bit + Wayfire (Wayland compositor) + Chromium kiosk mode pointed at Vercel URL. 27\" QHD 1440p IPS 100Hz display. Supabase session persists in Chromium profile across reboots. Kyle's location deployed; Mel's location pending."
+    },
+    {
+      "id": "feat-024",
+      "name": "Display Schedule",
+      "status": "complete",
+      "updated": "2026-05-27",
+      "notes": "Per-device scheduled display control. display_schedule table (days[], time, action, brightness, enabled) with Realtime. CRUD API routes. Settings page: schedule list + add-event form + manual broadcast buttons (on/off/brightness presets). Pi daemon (systemd service) subscribes to Realtime: rebuilds node-cron jobs on schedule changes, executes wlopm/ddcutil on broadcast for immediate commands. ddcutil for hardware brightness via DDC/CI; wlopm (built from source) for display on/off via Wayland compositor."
     }
   ],
   "blockers": [],
-  "lastUpdated": "2026-05-26T22:00:00",
+  "lastUpdated": "2026-05-27T00:30:00",
   "repoUrl": "https://github.com/kjwheeler/wheeler-calendar"
 }
